@@ -1,0 +1,45 @@
+{
+  "name": "pm2-web_dashboard",
+  "version": "0.1.0",
+  "private": false,
+  "license": "MIT",
+  "scripts": {
+    "start": "node server.js",
+	"test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "express": "3.4.0",
+    "request": "~2.27.0",
+    "underscore": "~1.5.2",
+    "socket.io": "~0.9.16",
+    "q": "~0.9.7",
+    "node-persist": "0.0.1",
+    "argparse": "~0.1.15",
+	"del": "^2.2.2",
+    "gulp": "^3.9.1"
+  },
+  "devDependencies": {
+    "browser-sync": "^2.16.0",
+    "gulp": "^3.9.1",
+    "gulp-bower-src": "^0.1.0",
+    "gulp-concat": "^2.6.0",
+    "gulp-filter": "^4.0.0",
+    "gulp-rename": "^1.2.2",
+    "gulp-replace": "^0.5.4",
+    "gulp-sass": "^2.3.2",
+    "gulp-uglify": "^2.0.0",
+    "main-bower-files": "^2.13.1",
+    "run-sequence": "^1.2.2"
+  },
+  "keywords": [
+    "pm2",
+    "ui",
+    "monitoring",
+    "tools",
+    "sysadmin"
+  ],
+  "repository":{
+    "type" : "git",
+    "url" : "git://github.com/sealabr/pm2-web_dashboard"
+  }
+}
