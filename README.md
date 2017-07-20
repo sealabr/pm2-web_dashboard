@@ -16,3 +16,8 @@ $ pm2 start server.js -- --port 4001
 # run in browser
 
 http://localhost:4001
+
+# Help me Improve my project !!! send your suggestion to me: fabio.mendes.viana@gmail.com
+# roadmap!
+
+https://trello.com/b/SYTxtfOF/pm2-dashboard
