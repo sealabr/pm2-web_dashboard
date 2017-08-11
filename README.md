@@ -3,7 +3,8 @@ Web dashboard for pm2, using nodeJS with CoreUI template and socket.io
 
 # Install PM2
 
-$ npm install pm2 -g
+$ npm install -g pm2 
+$ npm install -g pm2-web
 
 # run pm2 web_dashboard
 
