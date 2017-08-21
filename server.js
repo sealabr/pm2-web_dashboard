@@ -73,6 +73,8 @@ storage.initSync({
   dir: args.storage  
 });
 
+console.log(storage);
+
 var pm2d = {};
 pm2d.updateInterval = undefined;
 pm2d.servers = storage.getItem('servers') || {};

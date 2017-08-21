@@ -146,4 +146,41 @@ angular
       }]
     }
   })
+  .state('app.pm2dashboard', {
+    url: '/pm2dashboard',
+    templateUrl: 'views/pm2dashboard.html',
+    ncyBreadcrumb: {
+      label: 'PM2 DASHBOARD'
+    },
+    resolve: {
+       loadPlugin: ['$ocLazyLoad', function ($ocLazyLoad) {
+           return $ocLazyLoad.load([
+               {
+                   serial: true,
+                   files: [
+                    'js/socket.io.min.js', 
+                    'js/underscore-min.js',
+                    'js/backbone-min.js',
+                    'js/jquery-2.0.3.min.js',
+                    'js/bootstrap.min.js',
+                    'js/handlebars.js',
+                    'js/moment.min.js',
+                    'js/noty/jquery.noty.js',
+                    'js/noty/top.js',
+                    'js/noty/default.js',
+                    'js/pm2p/client.js',
+                    'js/pm2p/events.js'
+                    ]
+               }
+           ]);
+       }],
+      loadMyCtrl: ['$ocLazyLoad', function($ocLazyLoad) {
+        // you can lazy load files for an existing module
+        return $ocLazyLoad.load({
+          files: ['js/controllers/charts.js']
+        });
+      }]
+    }
+  })
+
 }]);

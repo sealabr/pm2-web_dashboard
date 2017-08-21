@@ -117,4 +117,10 @@ angular
     url: '/500',
     templateUrl: 'views/pages/500.html'
   })
+
+  .state('appDashboard', {
+    url: '/pm2_dashboard',
+    templateUrl: 'views/pages/404.html'
+  })
+
 }]);

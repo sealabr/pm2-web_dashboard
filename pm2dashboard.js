@@ -9,7 +9,7 @@ var server = require('http').createServer(app);
 var io = require('socket.io').listen(server);
     io.set('log level', 1);
 var storage = require('node-persist');
-var routes = require('./lib/server/routes');
+var routes = require('./lib/server/routes_south11235');
 
 var parser = new ArgumentParser({
   version: '0.1.0',

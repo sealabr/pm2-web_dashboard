@@ -23,7 +23,7 @@ $ bower install
 
 $ pm2 web
 
-$ pm2 start server.js -- --port 4001
+$ pm2 start pm2dashboard.js -- --port 4001
 
 http://localhost:4001
 
@@ -31,7 +31,15 @@ http://localhost:4001
 
 $ gulp serve
 
+OR
+
+$ pm2 start server.js -- --port 4002
+
 http://localhost:3000
+
+OR
+
+http://localhost:4002
 
 Help me Improve my project !!! send your suggestion to me: 
 fabio.mendes.viana@gmail.com
