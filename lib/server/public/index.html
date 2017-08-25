@@ -5,8 +5,18 @@
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="/public/css/bootstrap.min.css" rel="stylesheet" media="screen">
-    <link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.min.css" rel="stylesheet">
+    <link href="/public/css/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <link href="/public/css/pm2p-dashboard.css" rel="stylesheet" media="screen">
+    <style>
+
+    .hide-icon{
+      display: none;
+    }
+    .show-icon{
+      display: inline-block;
+    }
+
+    </style>
 	</head>
 	<body>
     <header class="navbar navbar-inverse navbar-fixed-top">
@@ -75,7 +85,7 @@
 
     <script id="processListItem" type="text/x-handlebars-template">
       <tr>
-        <td><span class="pidstatus {{status_text}} icon-font"></span></td>
+        <td><span class="pidstatus {{status_text}} fa fa-font"></span></td>
         <td>{{name}}</td>
         <td>{{mem_text}}</td>
         <td>
@@ -86,6 +96,10 @@
         <td>{{started}}</td>
         <td>{{unstable_restarts}}</td>
         <td>{{pid}}</td>
+        <td>  
+            <i class="fa fa-cog" data-toggle="modal" data-call-type="options" data-process-name="{{name}}" data-target="#myModal" aria-hidden="true" ></i>
+            <i class="fa fa-whatsapp {{is_yowsup}}-icon" data-process-name="{{name}}" data-toggle="modal" data-call-type="whatsapp" data-target="#myModal" data-host="{{host}}" aria-hidden="true" style="margin-left: 5px"></i>
+        </td>
       </tr>
     </script>
 
@@ -113,16 +127,6 @@
         <div class="container">
           <section>
             <div class="row">
-              <div class="col-lg-3">
-                <div class="panel panel-primary">
-                  <div class="panel-heading">
-                    <h3 class="panel-title">Yowsup</h3>
-                  </div>
-                  <div class="panel-content meminfo" style="padding: 10px"></div>
-                </div>                
-              </div>
-            </div>
-            <div class="row">
               <div class="col-lg-9">
                 <section>
                 <table class="table table-striped table-bordered table-hover">
@@ -135,6 +139,7 @@
                       <th>started</th>
                       <th>restarts</th>
                       <th>pid</th>
+                      <th>actions</th>
                     </tr>
                   </thead>
                   <tbody></tbody>
@@ -167,6 +172,118 @@
           </section>
         </div>
       </div>
+    </script>
+
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+          </div>
+          <div class="modal-body">
+            <div id="div_options">
+              <input type="text" name="process_name" id="process_name">
+            </div>
+            <div id="div_whatsapp">
+              HOST: <input type="text" name="yowsup_host" id="yowsup_host"> <BR>
+              PORT: <input type="text" name="yowsup_port" id="yowsup_port">
+            </div>
+            <div id="retorno_msg"></div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" id="btn_start" class="btn btn-success" >START</button>
+            <button type="button" id="btn_stop" class="btn btn-danger" >STOP</button>
+            <button type="button" id="btn_restart" class="btn btn-warning" >RESTART</button>
+            <button type="button" id="btn_logerr" class="btn btn-primary" >LOG ERR</button>
+            <button type="button" id="btn_logout" class="btn btn-primary" >LOG OUT</button>
+            <button type="button" id="btn_send_whatsapp" class="btn btn-primary" >Send Whatsapp</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script type="text/javascript">
+
+    $( document ).ready(function() {
+
+      $('#myModal').on('show.bs.modal', function(e) {
+
+          $("#retorno_msg").html('');
+
+          var call_type = $(e.relatedTarget).data('call-type');
+
+          hide_modals_el();
+
+            if(call_type == "whatsapp"){
+
+              var processname = $(e.relatedTarget).data('process-name');
+              $("#div_whatsapp").show();
+              $("#btn_send_whatsapp").show();
+              var host = $(e.relatedTarget).data('host');
+              var port = processname.replace(/[^0-9]/g, '').substring(0, 4);
+              $("#yowsup_host").val(host);
+              $("#yowsup_port").val(port);
+
+            }else if(call_type = "options"){
+
+              $("#div_options").show();
+              $("#btn_start").show();
+              $("#btn_stop").show();
+              $("#btn_restart").show();
+              $("#btn_logerr").show();
+              $("#btn_logout").show();
+              var processname = $(e.relatedTarget).data('process-name');
+              $("#process_name").val(processname);
+
+            }else{
+
+                alert("erro call_type");
+
+            }
+
+      });
+
+      $( "#btn_stop" ).on( "click", function() {
+
+        $.get('/pm2stop', {
+          process_name:$("#process_name").val()
+        }, function(retorno) {
+
+          $("#retorno_msg").html(retorno);
+
+        });
+
+      });
+
+      $( "#btn_start" ).on( "click", function() {
+
+        $.get('/pm2start', {
+          process_name:$("#process_name").val()
+        }, function(retorno) {
+
+          $("#retorno_msg").html(retorno);
+
+        });
+
+      });
+
+    });
+
+    function hide_modals_el(){
+
+      $("#process_name").hide();
+      $("#btn_start").hide();
+      $("#btn_stop").hide();
+      $("#btn_restart").hide();
+      $("#btn_logerr").hide();
+      $("#btn_logout").hide();
+      $("#btn_send_whatsapp").hide();
+      $("#div_options").hide();
+      $("#div_whatsapp").hide();
+
+    }
+
     </script>
   </body>
 </html>

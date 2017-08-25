@@ -10,6 +10,7 @@ var io = require('socket.io').listen(server);
     io.set('log level', 1);
 var storage = require('node-persist');
 var routes = require('./lib/server/routes_south11235');
+var pm2 = require('pm2');
 
 var parser = new ArgumentParser({
   version: '0.1.0',
@@ -147,6 +148,54 @@ io.sockets.on('connection', function(socket){
       }
     },args.interval);
   }
+});
+
+app.get('/pm2stop', function (req, res) {
+
+  var process_name = req.query.process_name;
+
+  pm2.stop(process_name, function(err, apps) {
+
+      console.log(err);
+      console.log(apps);
+
+
+   });
+
+  res.send('Process Stoped ' + process_name);
+
+});
+
+app.get('/pm2start', function (req, res) {
+
+  var process_name = req.query.process_name;
+
+  pm2.start(process_name, function(err, apps) {
+
+      console.log(err);
+      console.log(apps);
+
+
+   });
+
+  res.send('Process Started ' + process_name);
+
+});
+
+app.get('/pm2logs', function (req, res) {
+
+  var process_name = req.query.process_name;
+  var url = req.query.url;
+  var port = req.query.port;
+
+  request(url + ':' + port, function(err, resp, body){
+    
+    var json = JSON.parse(body);
+
+    console.log(json)
+
+  });
+
 });
 
 app.get('/', routes.index);

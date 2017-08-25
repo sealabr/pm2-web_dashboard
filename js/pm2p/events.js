@@ -36,6 +36,8 @@ $(function(){
 
   pm2d.events.on('systemStats:receive', function(msg){
     var enrichedStats = pm2d.enrichStats( msg );
+    console.log('enrichedStats');
+    console.log(enrichedStats);
     //render full tab content if it doesn't exist. 
     if ( pm2d.servers[ enrichedStats.system_info.name ] && $('#host-'  + enrichedStats.system_info.id).length === 0 ) {
       $('#systems').append( pm2d.templates.renderSystemStats( enrichedStats ) );
