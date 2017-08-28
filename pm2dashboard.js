@@ -11,6 +11,8 @@ var io = require('socket.io').listen(server);
 var storage = require('node-persist');
 var routes = require('./lib/server/routes_south11235');
 var pm2 = require('pm2');
+var path = require('path');
+var fs = require('fs');
 
 var parser = new ArgumentParser({
   version: '0.1.0',
@@ -153,8 +155,9 @@ io.sockets.on('connection', function(socket){
 app.get('/pm2stop', function (req, res) {
 
   var process_name = req.query.process_name;
+  var pm_id = req.query.pm_id;
 
-  pm2.stop(process_name, function(err, apps) {
+  pm2.stop(pm_id, function(err, apps) {
 
       console.log(err);
       console.log(apps);
@@ -169,8 +172,9 @@ app.get('/pm2stop', function (req, res) {
 app.get('/pm2start', function (req, res) {
 
   var process_name = req.query.process_name;
+  var pm_id = req.query.pm_id;
 
-  pm2.start(process_name, function(err, apps) {
+  pm2.start(pm_id, function(err, apps) {
 
       console.log(err);
       console.log(apps);
@@ -184,17 +188,19 @@ app.get('/pm2start', function (req, res) {
 
 app.get('/pm2logs', function (req, res) {
 
-  var process_name = req.query.process_name;
-  var url = req.query.url;
-  var port = req.query.port;
+  var file_name = req.query.file_name;
 
-  request(url + ':' + port, function(err, resp, body){
-    
-    var json = JSON.parse(body);
-
-    console.log(json)
-
+  fs.readFile(file_name, 'utf8', function (err,data) {
+    if (err) {
+      res.send(err);
+    }
+    //console.log(data);
+    res.send(data);
   });
+
+  res.send('end');
+
+
 
 });
 

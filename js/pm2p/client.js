@@ -27,7 +27,6 @@ var pm2d = (function(){
     },
 
     setupSocket: function(){
-      alert('HERE');
       console.log('PM2D: connecting and configuring socket');
       pm2d.socket = window.SOCKET = io.connect('/');
       pm2d.socket.on( 'connect'       , function(){     pm2d.events.trigger('socket:connected' )});
@@ -38,8 +37,6 @@ var pm2d = (function(){
     },
 
     renderTabs: function(){
-      console.log('pm2d.servers')
-      console.log(pm2d.servers)
       $('#tabList').empty();
       for (s in pm2d.servers) {
         $('#tabList').append( pm2d.templates.renderTabList({id: s, hostname: pm2d.normalizeName( pm2d.servers[s].url ) }) );

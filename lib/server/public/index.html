@@ -86,7 +86,7 @@
     <script id="processListItem" type="text/x-handlebars-template">
       <tr>
         <td><span class="pidstatus {{status_text}} fa fa-font"></span></td>
-        <td>{{name}}</td>
+        <td>{{pm_id}} - {{name}}</td>
         <td>{{mem_text}}</td>
         <td>
           <div class="progress progress-striped">
@@ -97,7 +97,25 @@
         <td>{{unstable_restarts}}</td>
         <td>{{pid}}</td>
         <td>  
-            <i class="fa fa-cog" data-toggle="modal" data-call-type="options" data-process-name="{{name}}" data-target="#myModal" aria-hidden="true" ></i>
+            <i class="fa fa-cog" data-toggle="modal" data-call-type="options" 
+
+            data-process-name="{{name}}" 
+            data-pm_id="{{pm_id}}" 
+            data-pm_out_log_path="{{pm_out_log_path}}"
+            data-pm_err_log_path="{{pm_err_log_path}}"
+
+            data-target="#myModal" aria-hidden="true" ></i>
+            <i class="fa fa-info-circle" data-toggle="modal" data-call-type="infos" 
+
+            data-pm_id="{{pm_id}}"
+            data-service_type="{{service_type}}" 
+            data-service_id="{{service_id}}" 
+            data-service_client="{{service_client}}" 
+            data-service_port="{{service_port}}" 
+            data-service_version="{{service_version}}" 
+
+
+            data-target="#myModal" aria-hidden="true"  style="margin-left: 5px"></i>
             <i class="fa fa-whatsapp {{is_yowsup}}-icon" data-process-name="{{name}}" data-toggle="modal" data-call-type="whatsapp" data-target="#myModal" data-host="{{host}}" aria-hidden="true" style="margin-left: 5px"></i>
         </td>
       </tr>
@@ -127,7 +145,7 @@
         <div class="container">
           <section>
             <div class="row">
-              <div class="col-lg-9">
+              <div class="col-lg-12">
                 <section>
                 <table class="table table-striped table-bordered table-hover">
                   <thead>
@@ -146,6 +164,7 @@
                 </table>
               </section>
               </div>
+              <!--
               <div class="col-lg-3">
                 <div class="panel panel-primary">
                   <div class="panel-heading">
@@ -168,6 +187,7 @@
                   <div class="panel-body hostInfo"></div>
                 </div>
               </div>
+              -->
             </div>
           </section>
         </div>
@@ -184,11 +204,21 @@
           </div>
           <div class="modal-body">
             <div id="div_options">
-              <input type="text" name="process_name" id="process_name">
+              <input type="text" name="process_name" id="process_name"> <BR>
+              <input type="text" name="pm_id" id="pm_id"> <BR>
+              <input type="text" name="pm_out_log_path" id="pm_out_log_path"> <BR>
+              <input type="text" name="pm_err_log_path" id="pm_err_log_path">
             </div>
             <div id="div_whatsapp">
               HOST: <input type="text" name="yowsup_host" id="yowsup_host"> <BR>
-              PORT: <input type="text" name="yowsup_port" id="yowsup_port">
+              PORT: <input type="text" name="yowsup_port" id="yowsup_port"> <BR>
+              NUMBER: <select name="yowsup_number" id="yowsup_number"> 
+                          <option value="5524992942594">5524992942594 - FABIO</option>
+                          <option value="553284034860">553284034860 - LEANDRO</option>
+                      </select>
+            </div>
+            <div id="div_infos">
+             
             </div>
             <div id="retorno_msg"></div>
           </div>
@@ -221,11 +251,24 @@
               $("#div_whatsapp").show();
               $("#btn_send_whatsapp").show();
               var host = $(e.relatedTarget).data('host');
-              var port = processname.replace(/[^0-9]/g, '').substring(0, 4);
+
+              var exp = processname.split("-");
+
+              for (index = 0; index < exp.length; ++index) {
+                  
+                  if(exp[index].trim().length == 4 && isNumber(exp[index].trim())){
+
+                      var port = exp[index].trim();
+
+                  }
+
+              }
+
+              //var port = processname.replace(/[^0-9]/g, '').substr(-4);
               $("#yowsup_host").val(host);
               $("#yowsup_port").val(port);
 
-            }else if(call_type = "options"){
+            }else if(call_type == "options"){
 
               $("#div_options").show();
               $("#btn_start").show();
@@ -234,11 +277,37 @@
               $("#btn_logerr").show();
               $("#btn_logout").show();
               var processname = $(e.relatedTarget).data('process-name');
+              var pm_id = $(e.relatedTarget).data('pm_id');
+              var pm_out_log_path = $(e.relatedTarget).data('pm_out_log_path');
+              var pm_err_log_path = $(e.relatedTarget).data('pm_err_log_path');
               $("#process_name").val(processname);
+              $("#pm_id").val(pm_id);
+              $("#pm_out_log_path").val(pm_out_log_path);
+              $("#pm_err_log_path").val(pm_err_log_path);
+
+            }else if(call_type == "infos"){
+
+               $("#div_infos").show();
+
+               var pm_id = $(e.relatedTarget).data('pm_id');
+               var service_type = $(e.relatedTarget).data('service_type');
+               var service_id = $(e.relatedTarget).data('service_id');
+               var service_client = $(e.relatedTarget).data('service_client');
+               var service_port = $(e.relatedTarget).data('service_port');
+               var service_version = $(e.relatedTarget).data('service_version');
+
+               var html = 'pm_id = '+pm_id + '<BR>';
+               html += 'service_type = '+service_type + '<BR>';
+               html +=  'service_id = '+service_id + '<BR>';
+               html +=  'service_client = '+service_client + '<BR>';
+               html +=  'service_port = '+service_port + '<BR>';
+               html +=  'service_version = '+service_version + '<BR>';
+
+               $("#div_infos").html(html);
 
             }else{
 
-                alert("erro call_type");
+               alert("erro call_type");
 
             }
 
@@ -247,7 +316,8 @@
       $( "#btn_stop" ).on( "click", function() {
 
         $.get('/pm2stop', {
-          process_name:$("#process_name").val()
+          process_name:$("#process_name").val(),
+          pm_id:$("#pm_id").val()
         }, function(retorno) {
 
           $("#retorno_msg").html(retorno);
@@ -259,7 +329,8 @@
       $( "#btn_start" ).on( "click", function() {
 
         $.get('/pm2start', {
-          process_name:$("#process_name").val()
+          process_name:$("#process_name").val(),
+          pm_id:$("#pm_id").val()
         }, function(retorno) {
 
           $("#retorno_msg").html(retorno);
@@ -267,6 +338,54 @@
         });
 
       });
+
+      $( "#btn_send_whatsapp" ).on( "click", function() {
+
+        var host = $("#yowsup_host").val();
+        var port = $("#yowsup_port").val();
+        var msg = ShowLocalDate();
+        var number = $("#yowsup_number").val();
+        var url = host + ":" + port + "/SendPostMessage";
+
+      $.ajax({
+        url: url,
+        type: 'POST',
+        //contentType: 'application/json; charset=UTF-8',
+        //dataType: 'json',
+        data:         {
+            msg: msg,
+            number: number
+        }
+      });
+
+      /*
+
+        $.post(url,
+        {
+            msg: msg,
+            number: number
+        },
+        function(data, status){
+            alert("Data: " + data + "\nStatus: " + status);
+        });
+
+        */
+
+
+      });
+
+      $( "#btn_logerr" ).on( "click", function() {
+
+        $.get('/pm2logs', {
+          file_name:$("#pm_out_log_path").val()
+        }, function(retorno) {
+
+          alert(retorno);
+
+        });
+
+      });
+
 
     });
 
@@ -281,7 +400,19 @@
       $("#btn_send_whatsapp").hide();
       $("#div_options").hide();
       $("#div_whatsapp").hide();
+      $("#div_infos").hide();
 
+    }
+
+    function ShowLocalDate()
+    {
+    var dNow = new Date();
+    var localdate= (dNow.getMonth()+1) + '/' + dNow.getDate() + '/' + dNow.getFullYear() + ' ' + dNow.getHours() + ':' + dNow.getMinutes();
+    return localdate;
+    }
+
+    function isNumber(n) {
+      return !isNaN(parseFloat(n)) && isFinite(n);
     }
 
     </script>
