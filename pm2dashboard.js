@@ -186,6 +186,24 @@ app.get('/pm2start', function (req, res) {
 
 });
 
+
+app.get('/pm2restart', function (req, res) {
+
+  var process_name = req.query.process_name;
+  var pm_id = req.query.pm_id;
+
+  pm2.restart(pm_id, function(err, apps) {
+
+      console.log(err);
+      console.log(apps);
+
+
+   });
+
+  res.send('Process Restarted ' + process_name);
+
+});
+
 app.get('/pm2logs', function (req, res) {
 
   var file_name = req.query.file_name;
@@ -195,12 +213,20 @@ app.get('/pm2logs', function (req, res) {
       res.send(err);
     }
     //console.log(data);
-    res.send(data);
+    var lines = data.trim().split('\n');
+
+    var lasts = lines.slice(Math.max(lines.length - 30, 1))
+
+    var implode = lasts.join("\n");
+
+      if(implode == ""){
+
+        implode = "no content";
+
+      }
+
+    res.send(implode);
   });
-
-  res.send('end');
-
-
 
 });
 
