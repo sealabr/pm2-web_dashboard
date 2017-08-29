@@ -1,0 +1,28 @@
+{
+  "apps" : [
+ {
+    "name"        : "MOBILE - YOWSUP - 553298169972 - 5252 - v2.0",
+    "script"      : "server_5252.js",
+    "watch"       : false,
+    "cwd"         : "C:\\xampp\\htdocs\\pm2-web_dashboard\\",
+    "env": {
+      "service_type": "YOWSUP",
+	  "service_id": "553298169972",
+      "service_client": "MOBILE",
+      "service_port": "5252",
+      "service_version": "v2.0"
+    }
+  }, {
+    "name"        : "XTOOLS - PM2DASHBOARD - 5551 - v1.0",
+    "script"      : "server_5551.js",
+    "watch"       : false,
+    "cwd"         : "C:\\xampp\\htdocs\\pm2-web_dashboard\\",
+    "env": {
+      "service_type": "XTOOLS",
+      "service_name": "PM2DASHBOARD",
+      "service_port": "3300",
+      "service_version": "v1.0"
+    }  
+  }
+]
+}
