@@ -269,7 +269,7 @@
             <a href="./?noreverse">chronological</a> view.
             <a id="pause" href='#'>Pause</a>.
 
-            <a target="_BLANK" href="http://localhost:4001/pm2logs?file_name=C:\Users\Fabio\.pm2\logs\index-out-3.log&_=1503975771062">WEB VIEW</a>
+            <a id="window_log" href="#">WEB VIEW</a>
 
         </div>
         <pre id="data">Loading...</pre>
@@ -491,6 +491,11 @@
 
       });
 
+      $( "#window_log" ).on( "click", function() {
+
+        window.open('/pm2logs?file_name='+$("#pm_out_log_path").val());
+
+      });
 
 
     });

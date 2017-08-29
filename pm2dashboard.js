@@ -217,7 +217,9 @@ app.get('/pm2logs', function (req, res) {
 
     var lasts = lines.slice(Math.max(lines.length - 30, 1))
 
-    var implode = lasts.join("\n");
+    var implode = lasts.join("\n" + "<BR>");
+
+    console.log(implode);
 
       if(implode == ""){
 
